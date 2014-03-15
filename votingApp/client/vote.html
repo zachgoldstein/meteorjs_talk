@@ -1,0 +1,48 @@
+<head>
+	<title>MeteorJS Voting App</title>
+</head>
+
+<body>
+	{{> voting}}
+</body>
+
+<template name="voting">
+	<div class="container-fluid">
+		<h1 class="text-center">What would you rather fight?</h1>
+		<div class="row">
+			<img class="question-image center-block" src="horsePic.jpg">
+		</div>		
+		<div class="row voting">
+			<div class="vote-bar-bg">
+			</div>
+			<div class="vote-bar" style="width: {{getVoteBarWidth}}%">
+			</div>
+		</div>
+		<div class="row voting">
+			<div class="vote-left col-xs-6">
+				<button type="button" class="btn btn-lg btn-default center-block">A horse sized duck ({{getLeftVotes}} Votes)</button>
+			</div>
+			<div class="vote-right col-xs-6">
+				<button type="button" class="btn btn-lg btn-danger center-block">100 duck-sized horses ({{getRightVotes}} Votes)</button>
+			</div>
+		</div>
+
+		<div class="row voting">
+			<div class="col-xs-12">
+				<h2 class="text-center">
+					People would rather fight 
+					{{#if isLeftWinning }}
+						a horse-sized duck
+					{{else}}
+						100 duck-sized horses
+					{{/if}}
+				</h2>
+			</div>
+			{{#each votes}}
+				<div class="col-xs-12">
+					<h4 class="text-center">Vote for {{name}} at {{voteTime}}</h4>
+				</div>
+			{{/each}}
+		</div>		
+	</div>
+</template>

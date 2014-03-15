@@ -1,0 +1,321 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
+    title Meteor Magic
+
+    // build:css styles/styles.css
+    //- Check out 'src/bower_components/prism/themes/' for available themes
+    link(rel='stylesheet', type='text/css', href='bower_components/prism/themes/prism-tomorrow.css')
+    link(rel='stylesheet', type='text/css', href='styles/main.css')
+    link(rel='stylesheet', type='text/css', href='styles/customstyle.css')    
+    // endbuild
+
+  body
+
+    article
+
+      section.title-page
+        h1.logo Meteor 101
+
+      section.page-background
+        img(src="/images/magic1.gif")
+
+      section.page-background
+        h2 Zach Goldstein
+        h3 Engineer at Loke Digital
+        h3 Looking for mobile devs!
+
+      section.page-background
+        h2 MeteorJS is a framework for quickly making realtime apps
+        h3 This is a tour
+
+      section.page-background
+        h2 Today:
+        ul
+          li Why it's cool
+          li Basics of how it works
+          li And a few <em>frustrations</em>
+
+      section.page-background
+        h1 First a demo
+        h3 Would you rather fight a horse sized duck or a 100 duck sized horses?
+
+      section.page-background
+        h1 Go vote
+        h3 Deployed at http://votingapp.meteor.com/
+        pre
+          code.language-javascript.
+            $ meteor deploy votingApp.meteor.com
+
+      section.page-background
+        h1 Lowers Barriers
+        ul
+          li Simple to setup the reactive bits of a web-app
+          li Async that looks sync (sick) with fibers!
+          li Standard html, css, javascript
+
+      section.page-background
+        h1 Simple Frontend
+        h2 Handlebars (or Jade) with helpers
+        pre
+          code.language-markup 
+            | {{ methodCall }}
+            | {{> templateName}}
+
+      section.page-background
+        h2 Templates
+        pre
+          code.language-markup 
+            | {{&gt; voting}}
+            | &lt;template name="voting"&gt;
+            |   &lt;h1&gt;What would you rather fight?&lt;/h1&gt;
+            | &lt;/template&gt;
+
+      section.page-background
+        h2 each
+        pre
+          code.language-markup 
+            | {{#each votes}}
+            |   &lt;div class="col-xs-12"&gt;
+            |     &lt;h4 class="text-center"&gt;
+            |       Vote for {{name}} at {{voteTime}}
+            |     &lt;/p&gt;
+            |   &lt;/div&gt;
+            | {{/each}}
+
+      section.page-background
+        h2 if
+        pre
+          code.language-markup 
+            | &lt;h2 class="text-center"&gt;
+            |   People would rather fight 
+            |   {{#if isLeftWinning }}
+            |     a horse-sized duck
+            |   {{else}}
+            |     100 duck-sized horses
+            |   {{/if}}
+            | &lt;/h2&gt;
+
+      section.page-background
+        h2 with
+        pre
+          code.language-markup 
+            | {{#with vote1}}
+            |   &lt;div class="col-xs-12"&gt;
+            |     &lt;h4 class="text-center"&gt;
+            |       Vote for {{name}} at {{voteTime}}
+            |     &lt;/h4&gt;
+            |   &lt;/div&gt;
+            | {{/with}}
+
+      section.page-background
+        h2 isolate
+        h3 Only re-render bits of template at a time
+        pre
+          code.language-javascript.
+            {{#isolate}}...{{/isolate}}
+
+      section.page-background
+        h2 Ya so?
+        img(src="/images/notAmused.jpg")
+
+      section.page-background
+        h1 Client-side mongo queries
+        pre
+          code.language-javascript.
+            Template.voting.getVoteBarWidth = function () {
+              var numVotes1 = Votes.find({voteFor : 1}).count();
+              var numVotes2 = Votes.find({voteFor : 2}).count();
+              var width = numVotes1/(numVotes1 + numVotes2)*100;
+              return width;
+            };
+      
+      section.page-background
+        h2 Reused on Client and Server
+        pre
+          code.language-javascript.
+            Meteor.methods({
+              addVote: function(voteOption) {
+                Votes.insert(
+                  { voteFor: voteOption, 
+                    name: getName(voteOption-1),
+                    voteTime: new Date()
+                  });
+              }
+            });
+
+      section.page-background
+        img(src="/images/magic2.gif")
+
+      section.page-background
+        h1 Simple to wire up pub-sub
+
+      section.page-background
+        h3 Socketio can do pub-sub. How's that compare?
+        pre
+          code.language-javascript.
+            var io = require('socket.io').listen(80);
+            // Server
+            io.sockets.on('connection', function (socket) {
+              socket.emit('news', { hello: 'world' });
+              socket.on('my other event', function (data) {
+                console.log(data);
+              });
+            });
+            // Client
+            var socket = io.connect('http://localhost');
+            socket.on('news', function (data) {
+              console.log(data);
+              socket.emit('my other event', { my: 'data' });
+            });
+
+      section.page-background
+        h1 Meteorjs
+        pre
+          code.language-javascript.
+            // Server
+            Meteor.publish('votes', function (){
+              return Votes.find();
+            });
+            // Client Template Helper
+            Meteor.subscribe("votes");
+            Template.voting.getVotes = function () {
+              return Votes.find().count();
+            };
+
+      section.page-background
+        img(src="/images/magic3.gif")
+
+      section.page-background
+        h3 Uses distributed data protocol (DDP)
+        h3 Sockjs transport
+
+
+      section.page-background
+        h2 Standard problem, callback hell.
+        pre
+          code.language-javascript.
+            doSomething( function (err, result) {
+              doSomethingElse( function (err, result) {
+                doSomethingYetAgain( function (err, result) {
+                })
+              })
+            })
+      
+      section.page-background
+        h2 One solution is promise chains with Q
+        pre
+          code.language-javascript.
+            doSomething()
+              .then(doSomethingElse)
+              .then(doSomethingYetAgain)
+              .then(...)
+
+      section.page-background
+        h2 Meteorjs is async that looks sync
+        pre
+          code.language-javascript.
+            doSomething()
+            doSomethingElse()
+            doSomethingYetAgain()
+        h3 Uses fibers under the hood.
+
+      section.page-background
+        h2 Voting App Backend
+        pre
+          code.language-javascript.
+            Meteor.publish('votes', function (){
+              return Votes.find({},{sort:{voteTime: -1}});
+            });
+
+      section.page-background
+        img(src="/images/magic4.gif")
+
+      section.page-background
+        h1 What are Fibers?
+        h2 Lightweight thread
+        h3 High-level: "<em>Block a coroutine without blocking entire process</em>"
+        h3 New fiber for each request from client
+        h4 Similar to ES6 generators but explicit yield is abstracted away in meteorjs
+
+      section.page-background
+        h1 Buzzkill Time
+
+      section.page-background
+        h2 Meteorite package manager and Atmosphere repo
+        h3 Why? We can still use npm
+
+      section.page-background
+        h2 Couple Motivations
+        ul
+          li Client and server dominated by different package managers. Client-side has more innovations, try to draw on that
+          li Build is more complicated with HTML, CSS in packages
+          li Two-level namespace. Eliminate paradox of choice
+
+      section.page-background
+        h2 Couple Motivations
+        ul
+          li Official packages that just <em>work</em>
+          li No floating dependencies, pin to one version
+          li Deploy hooks. Yay Emails!
+          li Unified interface for docs.
+
+
+
+      section.page-background
+        h2 Callback-based Libs Need to be Wrapped
+        h3 You can use Async utils to avoid touching library
+        pre
+          code.language-javascript.
+            function getUserProfile(req, callback) {
+              ghapi.user.getFrom(req, callback)
+            }
+            var wrappedGetProfile = Meteor._wrapAsync(getUserProfile);
+
+            Meteor.methods({
+              getProfile: function(username) {
+                return wrappedGetProfile({user: username});
+              }
+            });
+
+      section.page-background
+        h2 Big Initial Page Loads 
+        h3 It's waiting for data
+        h3 Fast-render is cool
+        h3 Server-side rendering is coming, also very cool
+
+      section.page-background
+        h1 Unique Scaling Challenges
+        h3 CPU kills you short-term
+        h3 Large # of LRS (Live Result Sets)
+
+      section.page-background
+        h3 Memory to kill you long-term
+        h3 Client side data held in server memory
+        h3 The (Murderous) Merge Box
+
+      section.page-background
+        h1 Good Ideas
+        h3 Watch # of unique queries
+        h3 Be prepared to cluster in a hurry (meteor-cluster)
+        h3 Know how to setup a nginx/HAProxy load balancer with sticky sessions
+
+      section.page-background
+        h1 Thanks for Listening!
+        h2 Questions?
+        img(src="/images/questions.gif")
+
+    // build:js scripts/scripts.js
+    script(src='bower_components/bespoke.js/dist/bespoke.min.js')
+    script(src='bower_components/bespoke-keys/dist/bespoke-keys.min.js')
+    script(src='bower_components/bespoke-touch/dist/bespoke-touch.min.js')
+    script(src='bower_components/bespoke-bullets/dist/bespoke-bullets.min.js')
+    script(src='bower_components/bespoke-scale/dist/bespoke-scale.min.js')
+    script(src='bower_components/bespoke-hash/dist/bespoke-hash.min.js')
+    script(src='bower_components/bespoke-progress/dist/bespoke-progress.min.js')
+    script(src='bower_components/bespoke-state/dist/bespoke-state.min.js')
+    script(src='bower_components/prism/prism.js')
+    script(src='scripts/main.js')
+    // endbuild

@@ -1,0 +1,40 @@
+h1 {
+	background-color: black;
+	color: white;
+	padding: .5em;
+	border-radius: 0.2em;
+	font-size: 5em;
+}
+
+body {
+	background-image:  url("/foggy_birds.png");
+	background-position: left top;
+}
+
+.btn {
+	white-space: normal;
+	font-size: 4em;
+}
+
+.voting {
+	height:11em;
+}
+
+.vote-bar-bg {
+	border: 2px solid black;
+	background: red;
+	height: 10em;
+}
+
+.vote-bar {
+	background: black;
+	position: relative;
+	top: -10em;
+	height: 10em;
+}
+
+.question-image {
+	width: 445px;
+	height: 259px;
+	padding: 20px;
+}

@@ -1,0 +1,646 @@
+
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>
+    DIY Presentations with Bespoke.js
+  </title>
+  <link rel="stylesheet" type="text/css" href="css/css.css">
+  <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+  <article>
+    <section>
+      <h1>
+        Meteorjs
+      </h1>
+      <h3>
+         A little bit of magic
+      </h3>
+      <img src="img/meteorLogo.png">
+    </section>
+
+    <section>
+      <h1>
+        Zach Goldstein
+      </h1>
+      <h3>
+         Engineer at Loke Digital
+      </h3>
+    </section>
+
+    <section>
+      <h1>
+        Meteorjs is a framework for making realtime apps fast
+      </h1>
+      <h3>
+        This is a quick tour.
+      </h3>
+
+    </section>
+
+    <section>
+      <h2>
+        Today:
+      </h2>
+      <ul>
+        <li>
+          Why it's cool
+        </li>
+        <li>
+          Basics of how it works
+        </li>
+        <li>
+          A bit of magic
+        </li>
+      </ul>
+      <h3>
+        A few things frustrations
+      </h3>
+    </section>
+
+    <section>
+      <h1>
+        Link to meteor app
+      </h1>
+    </section>
+
+    <section>
+      <h1>
+        Deployed at: INSERT LOCATION HERE
+      </h1>
+      <h2>
+    <pre>
+<code data-language="javascript">
+meteor deploy votingApp.meteor.com</code>
+</pre>
+
+
+
+      </h2>
+      <h2>
+        Click and we'll see who wins at end
+      </h2>
+    </section>
+
+    <section>
+      <h1>
+        Lowers some barriers
+      </h1>
+      <h2>
+        Standard html, css, javascript
+      </h2>
+      <h2>
+        Simple to hook up to DB
+      </h2>
+      <h2>
+        Async that looks sync (sick) with fibers!
+      </h2>
+    </section>
+
+    <section>
+      <h1>
+        Simple views
+      </h1>
+      <h2>
+        Handlebars with helpers
+      </h2>
+      INSERT CODE
+    </section>
+
+    <section>
+      <h1>
+        Client-side mongo queries
+      </h1>
+      INSERT CODE
+    </section>
+
+    <section>
+      <h1>
+        Isolation (Angular-esque?)
+      </h1>
+      <h3>
+        Only re-render related bits at a time.
+      </h3>
+      {{#isolate}}...{{/isolate}}
+    </section>
+
+    <section>
+      <img src="img/magic1.jpg">
+    </section>
+
+
+    <section>
+      <h1>
+        Simple to wire up to pub-sub
+      </h1>
+    </section>
+
+    <section>
+      <h1>
+        Socketio is pub-sub. How's that compare?
+      </h1>
+    </section>
+
+    <section>
+      <h1>
+        Socketio with angular
+      </h1>
+      INSERT CODE HERE
+    </section>
+
+    <section>
+      <h1>
+        Meteorjs
+      </h1>
+      INSERT CODE HERE
+    </section>
+
+    <section>
+      <img src="img/magic2.jpg">
+    </section>
+
+
+    <section>
+      <h1>
+        Backend is a...synchronous?
+      </h1>
+    </section>
+
+    <section>
+      <h1>
+        Standard problem, callback hell.
+      </h1>
+
+    <pre>
+<code data-language="javascript">
+doSomething( function (err, result) {
+  doSomethingElse( function (err, result) {
+    doSomethingYetAgain( function (err, result) {
+    })
+  })
+})
+</code>
+</pre>
+    </section>
+
+
+    <section>
+      <h1>
+        One solution is promise chains with Q
+      </h1>
+    <pre>
+<code data-language="javascript">
+doSomething()
+  .then(doSomethingElse)
+  .then(doSomethingYetAgain)
+  .then(...)
+</code>
+</pre>
+    </section>
+
+    <section>
+      <h1>
+        Meteorjs is async that looks sync
+      </h1>
+    <pre>
+<code data-language="javascript">
+doSomething()
+doSomethingElse()
+doSomethingYetAgain()
+</code>
+</pre>
+      <h2>
+        Uses fibers under the hood.
+      </h2>      
+    </section>
+
+    <section>
+      <img src="img/magic3.jpg">
+    </section>
+
+    <section>
+      <h1>Buzzkill Time</h1>
+    </section>
+
+    <section>
+      <img src="img/unhappy.jpg">
+    </section>
+
+    <section>
+      <h1>Meteorite package manager and Atmosphere repo</h1>
+      <h2>Why? We can still use npm</h2>
+      <h3>Meteor pacakges use fibers, adhere to specific API (smart.json)</h3>
+    </section>
+
+    <section>
+      <h1>Existing Node Libs Need to be Wrapped</h1>
+      <h2>You can use Async utils to avoid touching library</h2>
+    </section>
+
+    <section>
+      <h1>Existing Node Libs Need to be Wrapped</h1>
+      <h2>You can use async utils to avoid touching libraries</h2> 
+
+<pre>
+<code data-language="javascript">
+function getUserProfile(req, callback) {
+  ghapi.user.getFrom(req, callback);
+}
+var wrappedGetProfile = Meteor._wrapAsync(getUserProfile);
+
+Meteor.methods({
+  getProfile: function(username) {
+    return wrappedGetProfile({user: username});
+  }
+});
+</code>
+</pre>
+
+
+    </section>
+
+    <section>
+      <h1>Big initial page loads b/c of waiting for data</h1>
+      <h2>Fast-render is cool</h2>
+      http://meteorhacks.com/introducing-fast-render.html
+      <h2>Server-side rendering is coming, also very cool</h2>
+    </section>
+
+    <section>
+      <h1>Unique Scaling Challenges</h1>
+      <h2>Diff & Merge can have too many unique queries</h2>
+      <h3> Large # of LRS (Live Reload Sets) causes CPU to kill you short-term</h3>
+      <h2>Client side data held in memory</h2>
+      <h3>(Called Merge Box). Memory to kill you long-term</h3>
+    </section>
+
+    <section>
+      <h1>Thanks for Listening!</h1>
+    </section>
+
+    <section>
+      <h1>Questions?</h1>
+    </section>
+
+  </article>
+
+
+
+
+
+
+
+
+  <article class="reveal">
+    <section data-bespoke-state="reveal">
+      <h3>
+        DIY Presentations With
+      </h3>
+      <h1>
+        Bespoke.js
+      </h1>
+    </section>
+    <section data-bespoke-state="reveal">
+      <h2>
+        DIY Presentation
+        <br>
+        Micro-Framework
+      </h2>
+    </section>
+    <section data-bespoke-state="reveal">
+      <h2>
+        &lt;1KB, no dependencies
+      </h2>
+    </section>
+    <section data-bespoke-state="reveal">
+      <h2 data-bespoke-bullet>
+        Lightweight but powerful
+      </h2>
+      <ul>
+        <li data-bespoke-bullet>
+          Harnesses CSS transitions
+        </li>
+        <li data-bespoke-bullet>
+          Control API
+        </li>
+        <li data-bespoke-bullet>
+          Events
+        </li>
+      </ul>
+    </section>
+    <section data-bespoke-state="reveal">
+      <h1>
+        Plugins!
+      </h1>
+    </section>
+    <section data-bespoke-state="reveal">
+      <ul>
+        <li data-bespoke-bullet>
+          bespoke-vcr
+        </li>
+        <li data-bespoke-bullet>
+          bespoke-hash
+        </li>
+        <li data-bespoke-bullet>
+          bespoke-bullets
+        </li>
+        <li data-bespoke-bullet>
+          bespoke-loop
+        </li>
+        <li data-bespoke-bullet>
+          bespoke-spotlight
+          <br>
+          (by @mobz)
+        </li>
+      </ul>
+    </section>
+    <section data-bespoke-state="reveal" class="reveal">
+      <h2>
+        ...déjà vu?
+      </h2>
+    </section>
+    <section data-bespoke-state="pre-progress clean">
+    </section>
+    <section data-bespoke-state="pre-progress clean">
+      <h2>
+        Let's start from scratch.
+      </h2>
+    </section>
+    <section data-bespoke-state="pre-progress clean" class="font no-color">
+      <h2 data-bespoke-bullet>
+        Let's pick a font...
+      </h2>
+      <pre data-bespoke-bullet class="font">
+<code data-language="css">
+body {
+font-family: helvetica;
+}
+</code>
+</pre>
+  </section>
+  <section data-bespoke-state="pre-progress clean color" class="font">
+    <h2 data-bespoke-bullet>
+      Let's add some style...
+    </h2>
+    <pre data-bespoke-bullet class="font">
+<code data-language="css">
+.bespoke-parent {
+background: #ccc;
+color: #06f;
+}
+</code>
+</pre>
+  <pre data-bespoke-bullet class="font">
+<code data-language="css">
+.bespoke-slide {
+background: white;
+}
+</code>
+</pre>
+  </section>
+  <section data-bespoke-state="pre-progress clean color" class="font">
+    <h2 class="threedee">
+      Let's make it 3D!
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color" class="font classes">
+    <h2 data-bespoke-bullet>
+      Bespoke.js Classes
+    </h2>
+    <ul>
+      <li data-bespoke-bullet>
+        bespoke-active
+      </li>
+      <li data-bespoke-bullet>
+        bespoke-inactive
+      </li>
+      <li data-bespoke-bullet>
+        bespoke-before
+      </li>
+      <li data-bespoke-bullet>
+        bespoke-before-n
+      </li>
+      <li data-bespoke-bullet>
+        bespoke-after
+      </li>
+      <li data-bespoke-bullet>
+        bespoke-after-n
+      </li>
+    </ul>
+  </section>
+  <section data-bespoke-state="pre-progress clean color" class="font">
+    <pre data-bespoke-bullet>
+<code data-language="css">
+.bespoke-slide {
+transition: all .8s ease;
+transform-origin: 50% 50% -400px;
+}
+</code>
+</pre>
+  <pre data-bespoke-bullet>
+<code data-language="css">
+.bespoke-inactive {
+opacity: 0;
+}
+</code>
+</pre>
+  <pre data-bespoke-bullet>
+<code data-language="css">
+.bespoke-before {
+transform: rotateY(-90deg);
+}
+</code>
+</pre>
+  <pre data-bespoke-bullet>
+<code data-language="css">
+.bespoke-after {
+transform: rotateY(90deg);
+}
+</code>
+</pre>
+  </section>
+  <section data-bespoke-state="pre-progress clean color simple" class="font">
+    <h2>
+      1.
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color simple" class="font">
+    <h2>
+      2.
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color simple" class="font">
+    <h2>
+      3.
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color simple" class="font">
+    <h2>
+      Simple.
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color simple" class="font">
+    <h2>
+      More?
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color cards" class="font">
+    <h2>
+      How about...
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color cards" class="font">
+    <h2>
+      Cards?
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color cards" class="font">
+    <h2>
+      Or...
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color concave" class="font">
+    <h2>
+      How about...
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color concave" class="font">
+    <h2>
+      Concave?
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color concave" class="font">
+    <h2>
+      Or...
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color coverflow" class="font">
+    <h2>
+      How about...
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color coverflow" class="font">
+    <h2>
+      Coverflow?
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color coverflow" class="font">
+    <h2>
+      Simple.
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color simple" class="font">
+    <h2>
+      Let's make a progress bar...
+    </h2>
+  </section>
+  <section data-bespoke-state="pre-progress clean color simple" class="font">
+    <pre>
+<code data-language="javascript">
+bespoke.plugins.progress = function(deck) {
+
+var progress = document.querySelector('#progress');
+
+deck.on('activate', function(event) {
+progress.style.width = (
+(event.index * 100) /
+(deck.slides.length - 1)
+) + '%';
+});
+
+};
+</code>
+</pre>
+  </section>
+  <section data-bespoke-state="clean color simple progress" class="font">
+    <h2>
+      Whoosh.
+    </h2>
+  </section>
+  <section data-bespoke-state="clean color simple progress" class="font">
+    <h2 data-bespoke-bullet>
+      Bespoke.js Events
+    </h2>
+    <ul>
+      <li data-bespoke-bullet>
+        activate
+      </li>
+      <li data-bespoke-bullet>
+        deactivate
+      </li>
+      <li data-bespoke-bullet>
+        next
+      </li>
+      <li data-bespoke-bullet>
+        prev
+      </li>
+      <li data-bespoke-bullet>
+        slide
+      </li>
+    </ul>
+  </section>
+  <section data-bespoke-state="clean color simple progress" class="font">
+    <h2 data-bespoke-bullet>
+      Robust Plugin System
+    </h2>
+    <ul>
+      <li data-bespoke-bullet>
+        Return false to cancel events
+      </li>
+      <li data-bespoke-bullet>
+        Write intercepting plugins
+      </li>
+    </ul>
+  </section>
+  <section data-bespoke-state="clean color simple progress" class="font">
+    <h2>
+      Lessons
+    </h2>
+  </section>
+  <section data-bespoke-state="clean color simple progress" class="font">
+    <h2 data-bespoke-bullet>
+      Writing a library?
+    </h2>
+    <ul>
+      <li data-bespoke-bullet>
+        Tiny, extendable core
+      </li>
+      <li data-bespoke-bullet>
+        Plugins, even for common functionality
+      </li>
+      <li data-bespoke-bullet>
+        Modern browser features + polyfills
+      </li>
+    </ul>
+  </section>
+  <section data-bespoke-state="clean color simple progress" class="font">
+    <h2 data-bespoke-bullet>
+      Making a presentation?
+    </h2>
+    <h3 data-bespoke-bullet>
+      Do it yourself.
+    </h3>
+  </section>
+  <section data-bespoke-state="clean color simple progress" class="font">
+    <img src="img/profile.jpg">
+    <h2>
+      @markdalgleish
+    </h2>
+    <h3>
+      bit.ly/diyslides
+    </h3>
+  </section>
+  </article>
+  <script src="js/bespoke.min.js">
+  </script>
+  <script src="js/bespoke-plugins.js">
+  </script>
+  <script src="js/prefixfree.min.js">
+  </script>
+  <script src="js/rainbow.min.js">
+  </script>
+  <script src="js/js.js">
+  </script>
+</body>
