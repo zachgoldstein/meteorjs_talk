@@ -1,0 +1,37 @@
+.wow {
+	background:red;
+}
+.code {
+	margin: 0px;
+}
+
+.logo {
+	font-family: 'Helvetica Neue';
+	background-color: white;
+	border-radius: 0.2em;
+	padding: .5em;
+}
+
+.title-page {
+	background: none;
+}
+
+article {
+	background-image:  url("/images/universe.png");
+	background-size: 840px 650px;
+	background-position: left top;
+}
+
+.page-background {
+	background-color: #000000;
+	background-image:  url("/images/geometry.png");
+	background-position: left top;
+	border-radius: 0.5em;
+}
+
+.bespoke-progress-bar {
+	height: 0.5em;
+	background-color: red;
+	border-radius: 0em;
+}
+

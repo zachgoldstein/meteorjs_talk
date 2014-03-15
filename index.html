@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Meteor Magic</title>
+    <link rel="stylesheet" href="styles/styles.css"/>
+  </head>
+  <body>
+    <article>
+      <section class="title-page">
+        <h1 class="logo">Meteor 101</h1>
+      </section>
+      <section class="page-background"><img src="/images/magic1.gif"></section>
+      <section class="page-background">
+        <h2>Zach Goldstein</h2>
+        <h3>Engineer at Loke Digital</h3>
+        <h3>Looking for mobile devs!</h3>
+      </section>
+      <section class="page-background">
+        <h2>MeteorJS is a framework for quickly making realtime apps</h2>
+        <h3>This is a tour</h3>
+      </section>
+      <section class="page-background">
+        <h2>Today:</h2>
+        <ul>
+          <li>Why it's cool</li>
+          <li>Basics of how it works</li>
+          <li>And a few <em>frustrations</em></li>
+        </ul>
+      </section>
+      <section class="page-background">
+        <h1>First a demo</h1>
+        <h3>Would you rather fight a horse sized duck or a 100 duck sized horses?</h3>
+      </section>
+      <section class="page-background">
+        <h1>Go vote</h1>
+        <h3>Deployed at http://votingapp.meteor.com/</h3>
+        <pre><code class="language-javascript">$ meteor deploy votingApp.meteor.com
+</code></pre>
+      </section>
+      <section class="page-background">
+        <h1>Lowers Barriers</h1>
+        <ul>
+          <li>Simple to setup the reactive bits of a web-app</li>
+          <li>Async that looks sync (sick) with fibers!</li>
+          <li>Standard html, css, javascript</li>
+        </ul>
+      </section>
+      <section class="page-background">
+        <h1>Simple Frontend</h1>
+        <h2>Handlebars (or Jade) with helpers</h2>
+        <pre><code class="language-markup">{{ methodCall }}
+{{> templateName}}</code></pre>
+      </section>
+      <section class="page-background">
+        <h2>Templates</h2>
+        <pre><code class="language-markup">{{&gt; voting}}
+&lt;template name="voting"&gt;
+  &lt;h1&gt;What would you rather fight?&lt;/h1&gt;
+&lt;/template&gt;</code></pre>
+      </section>
+      <section class="page-background">
+        <h2>each</h2>
+        <pre><code class="language-markup">{{#each votes}}
+  &lt;div class="col-xs-12"&gt;
+    &lt;h4 class="text-center"&gt;
+      Vote for {{name}} at {{voteTime}}
+    &lt;/p&gt;
+  &lt;/div&gt;
+{{/each}}</code></pre>
+      </section>
+      <section class="page-background">
+        <h2>if</h2>
+        <pre><code class="language-markup">&lt;h2 class="text-center"&gt;
+  People would rather fight 
+  {{#if isLeftWinning }}
+    a horse-sized duck
+  {{else}}
+    100 duck-sized horses
+  {{/if}}
+&lt;/h2&gt;</code></pre>
+      </section>
+      <section class="page-background">
+        <h2>with</h2>
+        <pre><code class="language-markup">{{#with vote1}}
+  &lt;div class="col-xs-12"&gt;
+    &lt;h4 class="text-center"&gt;
+      Vote for {{name}} at {{voteTime}}
+    &lt;/h4&gt;
+  &lt;/div&gt;
+{{/with}}</code></pre>
+      </section>
+      <section class="page-background">
+        <h2>isolate</h2>
+        <h3>Only re-render bits of template at a time</h3>
+        <pre><code class="language-javascript">{{#isolate}}...{{/isolate}}
+</code></pre>
+      </section>
+      <section class="page-background">
+        <h2>Ya so?</h2><img src="/images/notAmused.jpg">
+      </section>
+      <section class="page-background">
+        <h1>Client-side mongo queries</h1>
+        <pre><code class="language-javascript">Template.voting.getVoteBarWidth = function () {
+  var numVotes1 = Votes.find({voteFor : 1}).count();
+  var numVotes2 = Votes.find({voteFor : 2}).count();
+  var width = numVotes1/(numVotes1 + numVotes2)*100;
+  return width;
+};
+</code></pre>
+      </section>
+      <section class="page-background">
+        <h2>Reused on Client and Server</h2>
+        <pre><code class="language-javascript">Meteor.methods({
+  addVote: function(voteOption) {
+    Votes.insert(
+      { voteFor: voteOption, 
+        name: getName(voteOption-1),
+        voteTime: new Date()
+      });
+  }
+});
+</code></pre>
+      </section>
+      <section class="page-background"><img src="/images/magic2.gif"></section>
+      <section class="page-background">
+        <h1>Simple to wire up pub-sub</h1>
+      </section>
+      <section class="page-background">
+        <h3>Socketio can do pub-sub. How's that compare?</h3>
+        <pre><code class="language-javascript">var io = require('socket.io').listen(80);
+// Server
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+// Client
+var socket = io.connect('http://localhost');
+socket.on('news', function (data) {
+  console.log(data);
+  socket.emit('my other event', { my: 'data' });
+});
+</code></pre>
+      </section>
+      <section class="page-background">
+        <h1>Meteorjs</h1>
+        <pre><code class="language-javascript">// Server
+Meteor.publish('votes', function (){
+  return Votes.find();
+});
+// Client Template Helper
+Meteor.subscribe("votes");
+Template.voting.getVotes = function () {
+  return Votes.find().count();
+};
+</code></pre>
+      </section>
+      <section class="page-background"><img src="/images/magic3.gif"></section>
+      <section class="page-background">
+        <h3>Uses distributed data protocol (DDP)</h3>
+        <h3>Sockjs transport</h3>
+      </section>
+      <section class="page-background">
+        <h2>Standard problem, callback hell.</h2>
+        <pre><code class="language-javascript">doSomething( function (err, result) {
+  doSomethingElse( function (err, result) {
+    doSomethingYetAgain( function (err, result) {
+    })
+  })
+})
+</code></pre>
+      </section>
+      <section class="page-background">
+        <h2>One solution is promise chains with Q</h2>
+        <pre><code class="language-javascript">doSomething()
+  .then(doSomethingElse)
+  .then(doSomethingYetAgain)
+  .then(...)
+  </code></pre>
+      </section>
+      <section class="page-background">
+        <h2>Meteorjs is async that looks sync</h2>
+        <pre><code class="language-javascript">doSomething()
+doSomethingElse()
+doSomethingYetAgain()</code></pre>
+        <h3>Uses fibers under the hood.</h3>
+      </section>
+      <section class="page-background">
+        <h2>Voting App Backend</h2>
+        <pre><code class="language-javascript">Meteor.publish('votes', function (){
+  return Votes.find({},{sort:{voteTime: -1}});
+});
+</code></pre>
+      </section>
+      <section class="page-background"><img src="/images/magic4.gif"></section>
+      <section class="page-background">
+        <h1>What are Fibers?</h1>
+        <h2>Lightweight thread</h2>
+        <h3>High-level: "<em>Block a coroutine without blocking entire process</em>"</h3>
+        <h3>New fiber for each request from client</h3>
+        <h4>Similar to ES6 generators but explicit yield is abstracted away in meteorjs</h4>
+      </section>
+      <section class="page-background">
+        <h1>Buzzkill Time</h1>
+      </section>
+      <section class="page-background">
+        <h2>Meteorite package manager and Atmosphere repo</h2>
+        <h3>Why? We can still use npm</h3>
+      </section>
+      <section class="page-background">
+        <h2>Couple Motivations</h2>
+        <ul>
+          <li>Client and server dominated by different package managers. Client-side has more innovations, try to draw on that</li>
+          <li>Build is more complicated with HTML, CSS in packages</li>
+          <li>Two-level namespace. Eliminate paradox of choice</li>
+        </ul>
+      </section>
+      <section class="page-background">
+        <h2>Couple Motivations</h2>
+        <ul>
+          <li>Official packages that just <em>work</em></li>
+          <li>No floating dependencies, pin to one version</li>
+          <li>Deploy hooks. Yay Emails!</li>
+          <li>Unified interface for docs.</li>
+        </ul>
+      </section>
+      <section class="page-background">
+        <h2>Callback-based Libs Need to be Wrapped</h2>
+        <h3>You can use Async utils to avoid touching library</h3>
+        <pre><code class="language-javascript">function getUserProfile(req, callback) {
+  ghapi.user.getFrom(req, callback)
+}
+var wrappedGetProfile = Meteor._wrapAsync(getUserProfile);
+
+Meteor.methods({
+  getProfile: function(username) {
+    return wrappedGetProfile({user: username});
+  }
+});
+</code></pre>
+      </section>
+      <section class="page-background">
+        <h2>Big Initial Page Loads </h2>
+        <h3>It's waiting for data</h3>
+        <h3>Fast-render is cool</h3>
+        <h3>Server-side rendering is coming, also very cool</h3>
+      </section>
+      <section class="page-background">
+        <h1>Unique Scaling Challenges</h1>
+        <h3>CPU kills you short-term</h3>
+        <h3>Large # of LRS (Live Result Sets)</h3>
+      </section>
+      <section class="page-background">
+        <h3>Memory to kill you long-term</h3>
+        <h3>Client side data held in server memory</h3>
+        <h3>The (Murderous) Merge Box</h3>
+      </section>
+      <section class="page-background">
+        <h1>Good Ideas</h1>
+        <h3>Watch # of unique queries</h3>
+        <h3>Be prepared to cluster in a hurry (meteor-cluster)</h3>
+        <h3>Know how to setup a nginx/HAProxy load balancer with sticky sessions</h3>
+      </section>
+      <section class="page-background">
+        <h1>Thanks for Listening!</h1>
+        <h2>Questions?</h2><img src="/images/questions.gif">
+      </section>
+    </article>
+    <script src="scripts/scripts.js"></script>
+  </body>
+</html>
